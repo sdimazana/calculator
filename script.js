@@ -17,3 +17,20 @@ function multiply(x, y){
 function divide(x, y){
     return x / y;
 }
+
+function operate(operator, firstOperand, secondOperand){
+    switch(operator){
+        case "+":
+            add(firstOperand, secondOperand);
+            break;
+        case "-":
+            subtract(firstOperand, secondOperand);
+            break;
+        case "*":
+            multiply(firstOperand, secondOperand);
+            break;
+        case "/":
+            divide(firstOperand, secondOperand);
+            break;
+    }
+}
