@@ -67,6 +67,35 @@ digitButtons.forEach((button) => {
     });
 });
 
+// operationButtons.forEach((button) => {
+//     button.addEventListener("click", () => {
+//         // Highlight the operation buttons in the UI when clicked
+//         if(button.textContent !== "=") button.style.filter = "brightness(1.16)";
+//         decimalButton.disabled = false;
+//         decimalButton.removeAttribute("style");
+//         clearDisplayFlag = true;
+
+//         operandsArray.splice(operandsArray.length, 0, Number(display.textContent));
+//         operationArray.splice(operationArray.length, 0, button.textContent);
+    
+//         if(operandsArray.length >= 2 && operationArray.length >= 2){
+//             firstOperand = operandsArray[operandsArray.length-2];
+//             secondOperand = operandsArray[operandsArray.length-1]
+//             operation = operationArray[operationArray.length-2]
+
+//             if(secondOperand === 0 && operation === "➗"){
+//                 display.textContent = "JAIL";
+//             }else{
+//                 result = operate(operation, firstOperand, secondOperand);
+//             }
+//             // if(result%1 !== 0) result = result.toFixed(2);
+//             display.textContent = result; 
+//             operandsArray.splice(operandsArray.length, 0, Number(result));
+//         }
+        
+//     });
+// });
+
 operationButtons.forEach((button) => {
     button.addEventListener("click", () => {
         // Highlight the operation buttons in the UI when clicked
@@ -76,21 +105,37 @@ operationButtons.forEach((button) => {
         clearDisplayFlag = true;
 
         operandsArray.splice(operandsArray.length, 0, Number(display.textContent));
-        operationArray.splice(operationArray.length, 0, button.textContent);
-    
-        if(operandsArray.length >= 2 && operationArray.length >= 2){
-            firstOperand = operandsArray[operandsArray.length-2];
-            secondOperand = operandsArray[operandsArray.length-1]
-            operation = operationArray[operationArray.length-2]
 
-            if(secondOperand === 0 && operation === "➗"){
-                display.textContent = "JAIL";
+        // As long as not equal sign, add operation symbols to the array
+        if(button.textContent !== "="){
+            operationArray.splice(operationArray.length, 0, button.textContent);
+
+            // If there's only one element in the array, don't use operationArray.length-2
+            if(operationArray.length < 2){
+                operation = operationArray[operationArray.length-1];
             }else{
-                result = operate(operation, firstOperand, secondOperand);
+                operation = operationArray[operationArray.length-2];
             }
-            // if(result%1 !== 0) result = result.toFixed(2);
-            display.textContent = result; 
-            operandsArray.splice(operandsArray.length, 0, Number(result));
+
+            // If there's only one element in the array, don't use operandArray.length-2
+            if(operandsArray.length < 2){
+                firstOperand = operandsArray[operandsArray.length-1];
+            }else{
+                firstOperand = operandsArray[operandsArray.length-2];
+                secondOperand = operandsArray[operandsArray.length-1];
+                result = operate(operation, firstOperand, secondOperand);
+                display.textContent = result;
+                operandsArray.splice(operandsArray.length, 0, Number(result));
+
+            }
+        }else{
+            firstOperand = operandsArray[operandsArray.length-2];
+            secondOperand = operandsArray[operandsArray.length-1];
+            operation = operationArray[operationArray.length-1];
+            result = operate(operation, firstOperand, secondOperand);
+            display.textContent = result;
+            operandsArray = [];
+            operationArray = [];
         }
         
     });
@@ -129,6 +174,14 @@ document.addEventListener("keyup", (event) =>{
         display.textContent = displayContent.join("");
     }else if(event.key >= 0 && event.key <= 9){
         display.textContent += event.key;
+    }else if(event.key === "+" || event.key === "-" || event.key === "*" || event.key === "/" || event.key === "="){
+        // Highlight the operation buttons in the UI when clicked
+        if(event.key !== "=") button.style.filter = "brightness(1.16)";
+        decimalButton.disabled = false;
+        decimalButton.removeAttribute("style");
+        clearDisplayFlag = true;
+
+        
     }
 });
 
